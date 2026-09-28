@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6c5ce7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="تعلم والعب">
+<link rel="manifest" href="manifest.json">
+<title>تعلم والعب – الإصدار 2</title>
+<style>
+:root{--bg:#f7f8ff;--card:#fff;--ink:#25304a;--muted:#69738b;--primary:#6c5ce7;--secondary:#00b894;--accent:#fdcb6e;--pink:#fd79a8;--shadow:0 12px 30px rgba(48,55,95,.10);--radius:24px}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#eef0ff 0,#f9fbff 42%,#fff 100%);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;color:var(--ink)}
+button{font:inherit;border:0;cursor:pointer} .app{max-width:760px;margin:auto;padding:16px 14px 90px}
+header{background:linear-gradient(135deg,#6c5ce7,#8e7dff);color:#fff;border-radius:30px;padding:22px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+header:after{content:"⭐";position:absolute;font-size:90px;left:-10px;bottom:-28px;opacity:.14}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:27px;font-weight:900}.subtitle{opacity:.9;margin-top:4px}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.pill{background:rgba(255,255,255,.18);padding:9px 13px;border-radius:999px;font-weight:800}
+.screen{display:none}.screen.active{display:block}.section-title{font-size:21px;font-weight:900;margin:24px 4px 12px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);text-align:right}
+.tile{min-height:130px;display:flex;flex-direction:column;justify-content:space-between;transition:.15s}.tile:active{transform:scale(.98)}.emoji{font-size:42px}.tile h3{margin:8px 0 2px;font-size:18px}.tile p{margin:0;color:var(--muted);font-size:13px}
+.progress{height:10px;background:#e9ecf5;border-radius:20px;overflow:hidden}.progress>i{display:block;height:100%;background:linear-gradient(90deg,#6c5ce7,#00b894);border-radius:20px;width:0}
+.big{font-size:62px;font-weight:1000;text-align:center;padding:25px}.center{text-align:center}.btn{background:var(--primary);color:#fff;border-radius:16px;padding:13px 18px;font-weight:900;box-shadow:0 7px 15px rgba(108,92,231,.2)}.btn.alt{background:#eef0ff;color:#5546c7}.btn.green{background:var(--secondary)}.btn.pink{background:var(--pink)}
+.actions{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:15px}.choice{background:#fff;border:2px solid #edf0f7;border-radius:18px;padding:15px;font-weight:900;color:var(--ink)}.choice.correct{border-color:#00b894;background:#eafff8}.choice.wrong{border-color:#ff7675;background:#fff0f0}
+.letter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.letter{padding:16px 8px;border-radius:17px;background:#fff;box-shadow:var(--shadow);font-size:28px;font-weight:900;text-align:center}
+.colors{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.color-btn{height:90px;border-radius:20px;color:#fff;font-weight:900;text-shadow:0 1px 3px #333}
+.memory{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.mem{aspect-ratio:1;background:#eeeefe;border-radius:18px;font-size:0}.mem.open,.mem.matched{font-size:32px;background:#fff}.mem.matched{opacity:.6}
+.badges{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.badge{text-align:center;padding:15px;background:#fff;border-radius:20px;box-shadow:var(--shadow)}.badge.lock{filter:grayscale(1);opacity:.45}
+.story{line-height:2;font-size:18px;background:#fff;border-radius:22px;padding:20px;box-shadow:var(--shadow)}
+nav{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);width:min(720px,calc(100% - 24px));background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-radius:22px;box-shadow:0 10px 35px rgba(40,45,80,.16);display:grid;grid-template-columns:repeat(4,1fr);padding:8px;z-index:20}
+nav button{background:transparent;color:#77809a;font-size:12px;font-weight:900;padding:8px 3px;border-radius:15px}nav button.active{background:#eef0ff;color:#5b4cd0}.navico{display:block;font-size:21px;margin-bottom:2px}
+input{width:100%;padding:13px;border:2px solid #edf0f7;border-radius:14px;font:inherit}
+.small{font-size:13px;color:var(--muted)}.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-130px);background:#25304a;color:#fff;padding:12px 18px;border-radius:999px;font-weight:800;z-index:50;transition:.3s}.toast.show{transform:translateX(-50%) translateY(0)}
+@media(min-width:650px){.grid{grid-template-columns:repeat(3,1fr)}.colors{grid-template-columns:repeat(6,1fr)}}
+</style>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+<div class="app">
+<header>
+  <div class="top"><div><div class="brand">🌟 تعلم والعب</div><div class="subtitle">نتعلم ونلعب ونكسب النجوم!</div></div><div style="font-size:42px">🧒</div></div>
+  <div class="stats"><span class="pill">⭐ <b id="stars">0</b></span><span class="pill">🏅 <b id="badgesCount">0</b></span><span class="pill">🔥 <b id="streak">1</b> يوم</span></div>
+</header>
+
+<section id="home" class="screen active">
+  <div class="section-title">اختر نشاطك 🎮</div>
+  <div class="grid">
+    <button class="card tile" onclick="show('letters')"><span class="emoji">🔤</span><div><h3>الحروف</h3><p>تعرف على الحروف وانطقها</p></div></button>
+    <button class="card tile" onclick="show('numbers')"><span class="emoji">🔢</span><div><h3>الأرقام</h3><p>عدّ وأجب عن الأسئلة</p></div></button>
+    <button class="card tile" onclick="show('colors')"><span class="emoji">🎨</span><div><h3>الألوان</h3><p>تعلم اللون الصحيح</p></div></button>
+    <button class="card tile" onclick="show('memory')"><span class="emoji">🧠</span><div><h3>الذاكرة</h3><p>طابق الصور واربح النجوم</p></div></button>
+    <button class="card tile" onclick="show('quiz')"><span class="emoji">🧩</span><div><h3>اختبار سريع</h3><p>أسئلة متنوعة للأطفال</p></div></button>
+    <button class="card tile" onclick="show('stories')"><span class="emoji">📖</span><div><h3>قصص قصيرة</h3><p>قصة مع قراءة صوتية</p></div></button>
+  </div>
+  <div class="section-title">تقدمك اليوم</div>
+  <div class="card"><div style="display:flex;justify-content:space-between;font-weight:900"><span>النجوم نحو الشارة التالية</span><span id="goalText">0/10</span></div><div class="progress" style="margin-top:10px"><i id="goalBar"></i></div></div>
+  <div class="section-title">مكافأة اليوم 🎁</div>
+  <div class="card center"><div style="font-size:45px">🎁</div><p>خذ مكافأتك اليومية</p><button id="dailyBtn" class="btn green" onclick="dailyReward()">احصل على 3 نجوم</button></div>
+</section>
+
+<section id="letters" class="screen">
+  <div class="section-title">الحروف العربية 🔤</div>
+  <div class="card center"><div id="letterBig" class="big">أ</div><div id="letterWord" style="font-size:22px;font-weight:900">أسد 🦁</div><div class="actions"><button class="btn" onclick="speakLetter()">🔊 اسمع</button><button class="btn alt" onclick="nextLetter()">التالي ➜</button></div></div>
+  <div class="section-title">اختر حرفًا</div><div id="lettersGrid" class="letter-grid"></div>
+</section>
+
+<section id="numbers" class="screen">
+  <div class="section-title">الأرقام 🔢</div>
+  <div class="card center"><div id="numVisual" class="big">🍎🍎🍎</div><div id="numQuestion" style="font-size:20px;font-weight:900">كم تفاحة؟</div><div id="numChoices" class="choices"></div></div>
+</section>
+
+<section id="colors" class="screen">
+  <div class="section-title">اختبار الألوان 🎨</div>
+  <div class="card center"><div id="colorPrompt" style="font-size:21px;font-weight:900">اضغط على اللون الأحمر</div><div id="colorChoices" class="colors" style="margin-top:16px"></div></div>
+</section>
+
+<section id="memory" class="screen">
+  <div class="section-title">لعبة الذاكرة 🧠</div>
+  <div class="card center"><p class="small">طابق كل صورتين. كل تطابق يمنحك نجمة.</p><div id="memoryGrid" class="memory"></div><div class="actions"><button class="btn alt" onclick="startMemory()">لعبة جديدة</button></div></div>
+</section>
+
+<section id="quiz" class="screen">
+  <div class="section-title">اختبار سريع 🧩</div>
+  <div class="card center"><div id="quizProgress" class="small"></div><div id="quizQ" style="font-size:22px;font-weight:900;margin-top:8px"></div><div id="quizChoices" class="choices"></div></div>
+</section>
+
+<section id="stories" class="screen">
+  <div class="section-title">قصة اليوم 📖</div>
+  <div class="card">
+    <h2>🐰 الأرنب الصغير</h2>
+    <div id="storyText" class="story">كان هناك أرنب صغير يحب التعلم واللعب. في كل صباح كان يتعلم حرفًا جديدًا، ثم يعدّ التفاحات في الحديقة. وفي نهاية اليوم كان يفرح بكل نجمة جمعها.</div>
+    <div class="actions"><button class="btn" onclick="speak(document.getElementById('storyText').innerText)">🔊 اقرأ القصة</button><button class="btn alt" onclick="addStars(2)">⭐ أكملت القصة</button></div>
+  </div>
+</section>
+
+<section id="parent" class="screen">
+  <div class="section-title">لوحة الوالدين 👨‍👩‍👧</div>
+  <div class="card">
+    <h3>ملخص التعلم</h3>
+    <p>النجوم: <b id="pStars">0</b></p>
+    <p>الألعاب المكتملة: <b id="pGames">0</b></p>
+    <p>الشارات: <b id="pBadges">0</b></p>
+    <p>الأيام المتتالية: <b id="pStreak">1</b></p>
+    <div class="progress"><i id="parentBar"></i></div>
+  </div>
+  <div class="section-title">الشارات 🏅</div><div id="badges" class="badges"></div>
+  <div class="section-title">اسم الطفل</div>
+  <div class="card"><input id="childName" placeholder="اكتب اسم الطفل" oninput="saveName()"><p class="small">يُحفظ الاسم على هذا الجهاز فقط.</p></div>
+</section>
+</div>
+
+<nav>
+<button class="active" onclick="show('home',this)"><span class="navico">🏠</span>الرئيسية</button>
+<button onclick="show('quiz',this)"><span class="navico">🧩</span>اختبار</button>
+<button onclick="show('stories',this)"><span class="navico">📖</span>قصص</button>
+<button onclick="show('parent',this)"><span class="navico">👨‍👩‍👧</span>الوالدان</button>
+</nav>
+
+<script>
+const state=JSON.parse(localStorage.getItem('t3lmV2')||'null')||{stars:0,games:0,streak:1,daily:'',name:''};
+const save=()=>{localStorage.setItem('t3lmV2',JSON.stringify(state));updateUI()};
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1700)}
+function addStars(n){state.stars+=n;state.games++;save();toast('أحسنت! ⭐ +'+n)}
+function updateUI(){
+ document.getElementById('stars').textContent=state.stars;document.getElementById('badgesCount').textContent=badgeList().filter(x=>x.ok).length;
+ document.getElementById('streak').textContent=state.streak;document.getElementById('pStars').textContent=state.stars;document.getElementById('pGames').textContent=state.games;document.getElementById('pBadges').textContent=badgeList().filter(x=>x.ok).length;document.getElementById('pStreak').textContent=state.streak;
+ const pct=Math.min(100,state.stars%10*10);document.getElementById('goalText').textContent=(state.stars%10)+'/10';document.getElementById('goalBar').style.width=pct+'%';document.getElementById('parentBar').style.width=Math.min(100,state.stars*5)+'%';
+ document.getElementById('childName').value=state.name||'';
+ const today=new Date().toISOString().slice(0,10);const b=document.getElementById('dailyBtn');b.disabled=state.daily===today;b.textContent=state.daily===today?'تم استلام مكافأة اليوم ✅':'احصل على 3 نجوم';
+ renderBadges();
+}
+function badgeList(){return[{e:'🌟',n:'بداية جميلة',ok:state.stars>=5},{e:'🏆',n:'جامع النجوم',ok:state.stars>=10},{e:'🧠',n:'بطل الذاكرة',ok:state.games>=3},{e:'📚',n:'محب التعلم',ok:state.games>=5},{e:'🔥',n:'مواظب',ok:state.streak>=3},{e:'👑',n:'نجم صغير',ok:state.stars>=25}]}
+function renderBadges(){document.getElementById('badges').innerHTML=badgeList().map(b=>`<div class="badge ${b.ok?'':'lock'}"><div style="font-size:35px">${b.e}</div><b>${b.n}</b><div class="small">${b.ok?'مفتوحة':'مغلقة'}</div></div>`).join('')}
+function dailyReward(){const d=new Date().toISOString().slice(0,10);if(state.daily===d)return;state.daily=d;addStars(3)}
+function saveName(){state.name=document.getElementById('childName').value;save()}
+function show(id,btn){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');else{const n=[...document.querySelectorAll('nav button')].find(x=>x.getAttribute('onclick')?.includes("'"+id+"'"));if(n)n.classList.add('active')}window.scrollTo({top:0,behavior:'smooth'})}
+function speak(t){if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='ar-SA';u.rate=.85;speechSynthesis.speak(u)}else toast('الصوت غير متاح في هذا المتصفح')}
+const letters=[['أ','أسد 🦁'],['ب','بطة 🦆'],['ت','تفاحة 🍎'],['ث','ثعلب 🦊'],['ج','جمل 🐪'],['ح','حصان 🐴'],['خ','خبز 🍞'],['د','دب 🐻'],['ذ','ذهب 🪙'],['ر','رمان 🍎'],['ز','زهرة 🌸'],['س','سمكة 🐟'],['ش','شمس ☀️'],['ص','صقر 🦅'],['ض','ضفدع 🐸'],['ط','طائرة ✈️'],['ظ','ظرف ✉️'],['ع','عنب 🍇'],['غ','غزال 🦌'],['ف','فيل 🐘'],['ق','قمر 🌙'],['ك','كتاب 📘'],['ل','ليمون 🍋'],['م','موز 🍌'],['ن','نحلة 🐝'],['ه','هلال 🌙'],['و','وردة 🌹'],['ي','يد ✋']];
+let li=0;
+function renderLetters(){document.getElementById('lettersGrid').innerHTML=letters.map((x,i)=>`<button class="letter" onclick="pickLetter(${i})">${x[0]}</button>`).join('');pickLetter(0)}
+function pickLetter(i){li=i;document.getElementById('letterBig').textContent=letters[i][0];document.getElementById('letterWord').textContent=letters[i][1]}
+function nextLetter(){li=(li+1)%letters.length;pickLetter(li);speak(letters[li][0])}
+function speakLetter(){speak('حرف '+letters[li][0]+'، '+letters[li][1].replace(/[^ء-ي ]/g,''))}
+const fruits=['🍎','🍌','🍊','🍓'];let numAns=0;
+function newNumber(){numAns=1+Math.floor(Math.random()*9);const f=fruits[Math.floor(Math.random()*fruits.length)];document.getElementById('numVisual').textContent=f.repeat(numAns);document.getElementById('numQuestion').textContent='كم عدد الأشياء؟';const opts=[numAns];while(opts.length<4){let n=1+Math.floor(Math.random()*9);if(!opts.includes(n))opts.push(n)}opts.sort(()=>Math.random()-.5);document.getElementById('numChoices').innerHTML=opts.map(n=>`<button class="choice" onclick="answerNumber(${n},this)">${n}</button>`).join('')}
+function answerNumber(n,b){if(n===numAns){b.classList.add('correct');addStars(1);setTimeout(newNumber,500)}else{b.classList.add('wrong');toast('حاول مرة أخرى 😊')}}
+const colorNames=[['الأحمر','#ff7675'],['الأزرق','#0984e3'],['الأخضر','#00b894'],['الأصفر','#fdcb6e'],['البنفسجي','#6c5ce7'],['الوردي','#fd79a8']];let targetColor=0;
+function newColor(){targetColor=Math.floor(Math.random()*colorNames.length);document.getElementById('colorPrompt').textContent='اضغط على اللون '+colorNames[targetColor][0];document.getElementById('colorChoices').innerHTML=colorNames.map((c,i)=>`<button class="color-btn" style="background:${c[1]}" onclick="answerColor(${i},this)">${c[0]}</button>`).join('')}
+function answerColor(i,b){if(i===targetColor){addStars(1);setTimeout(newColor,500)}else{b.style.transform='scale(.94)';toast('جرب لونًا آخر 😊')}}
+let memCards=[],memOpen=[],memLock=false;
+function startMemory(){memCards=['🍎','🐶','⭐','🚗','🍎','🐶','⭐','🚗'].sort(()=>Math.random()-.5);memOpen=[];memLock=false;document.getElementById('memoryGrid').innerHTML=memCards.map((_,i)=>`<button class="mem" id="m${i}" onclick="flipMem(${i})">❓</button>`).join('')}
+function flipMem(i){if(memLock||memOpen.includes(i)||document.getElementById('m'+i).classList.contains('matched'))return;const b=document.getElementById('m'+i);b.textContent=memCards[i];b.classList.add('open');memOpen.push(i);if(memOpen.length===2){memLock=true;const [a,c]=memOpen;if(memCards[a]===memCards[c]){document.getElementById('m'+a).classList.add('matched');document.getElementById('m'+c).classList.add('matched');addStars(1);memOpen=[];memLock=false;if([...document.querySelectorAll('.mem')].every(x=>x.classList.contains('matched')))setTimeout(startMemory,700)}else setTimeout(()=>{[a,c].forEach(j=>{const x=document.getElementById('m'+j);x.classList.remove('open');x.textContent='❓'});memOpen=[];memLock=false},700)}}
+const qs=[['ما هو أول حرف في كلمة أسد؟',['أ','ب','م'],'أ'],['كم عدد أيام الأسبوع؟',['5','7','10'],'7'],['أي لون يشبه الشمس؟',['أصفر','أزرق','أخضر'],'أصفر'],['أي حيوان يقول مياو؟',['قطة','حصان','فيل'],'قطة'],['ما العدد بعد 4؟',['3','5','8'],'5']];
+let qi=0;
+function newQuiz(){const q=qs[qi%qs.length];document.getElementById('quizProgress').textContent='السؤال '+(qi%qs.length+1)+' من '+qs.length;document.getElementById('quizQ').textContent=q[0];document.getElementById('quizChoices').innerHTML=q[1].map(x=>`<button class="choice" onclick="answerQuiz('${x.replace(/'/g,"\\'")}',this)">${x}</button>`).join('')}
+function answerQuiz(x,b){const q=qs[qi%qs.length];if(x===q[2]){b.classList.add('correct');addStars(2);qi++;setTimeout(newQuiz,600)}else{b.classList.add('wrong');toast('إجابة قريبة، حاول مرة أخرى 🌟')}}
+renderLetters();newNumber();newColor();startMemory();newQuiz();updateUI();
+</script>
+</body>
+</html>
