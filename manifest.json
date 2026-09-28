@@ -1,0 +1,11 @@
+{
+  "name":"تعلم والعب – الإصدار 2",
+  "short_name":"تعلم والعب",
+  "start_url":"./index.html",
+  "display":"standalone",
+  "background_color":"#f7f8ff",
+  "theme_color":"#6c5ce7",
+  "lang":"ar",
+  "dir":"rtl",
+  "icons":[]
+}
